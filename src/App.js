@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
 
+import './App.css'
+import React, {useEffect} from 'react';
+import TodoFeature from './features/Todo';
+import AlbumFeature from './features/Album';
+import CounterFeature from './features/Counter';
+import ProductFeature from './features/Product';
+import { Route, Link, Switch } from 'react-router-dom';
+import productApi from './api/productApi';
+import Header from './components/Header';
+;
 function App() {
+    useEffect(() =>{
+      const fetchProducts = async () => {
+        const params = {
+          _limit:10,
+        };
+        const productsList = await productApi.getAll(params);
+        console.log(productsList)
+      }
+
+      fetchProducts();
+    }, [])
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React123
-        </a>
-      </header>
-    </div>
+   <div className="App">
+     <Header/>
+     
+     <Switch>
+      <Route path="/" component={CounterFeature} exact/>
+      <Route path="/todos" component={TodoFeature} exact/>
+      <Route path="/todos" component={TodoFeature}/>
+      <Route path="/album" component={AlbumFeature}/>
+      <Route path="/products" component={ProductFeature}/>
+
+
+     </Switch>
+   </div>
   );
 }
 
