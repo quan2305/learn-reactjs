@@ -8,20 +8,10 @@ import ProductFeature from './features/Product';
 import { Route, Link, Switch } from 'react-router-dom';
 import productApi from './api/productApi';
 import Header from './components/Header';
+import CartFeature from './features/Cart';
 ;
 function App() {
-    useEffect(() =>{
-      const fetchProducts = async () => {
-        const params = {
-          _limit:10,
-        };
-        const productsList = await productApi.getAll(params);
-        console.log(productsList)
-      }
-
-      fetchProducts();
-    }, [])
-
+    
 
   return (
    <div className="App">
@@ -33,7 +23,7 @@ function App() {
       <Route path="/todos" component={TodoFeature}/>
       <Route path="/album" component={AlbumFeature}/>
       <Route path="/products" component={ProductFeature}/>
-
+      <Route path="/products" component={CartFeature}/>
 
      </Switch>
    </div>
