@@ -23,7 +23,7 @@ function App() {
       <Route path="/todos" component={TodoFeature}/>
       <Route path="/album" component={AlbumFeature}/>
       <Route path="/products" component={ProductFeature}/>
-      <Route path="/products" component={CartFeature}/>
+      <Route path="/cart" component={CartFeature}/>
 
      </Switch>
    </div>

@@ -8,78 +8,82 @@ import ProductInfo from '../components/ProductInfo';
 import AddToCartForm from '../components/AddToCartForm';
 import ProductMenu from '../components/ProductMenu';
 import ProductDescription from '../components/ProductDescription';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../Cart/CartSlice';
 
-const useStyles = makeStyles((theme)=>({
-    root: {},
-    left: {
-        width: '400px'
-    },
-    right: {
-        flex: '1',
-        marginRight: theme.spacing(2),
-    },
-    pagination: {
-        marginTop: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        paddingBottom: '20px',
-    },
-    img:{
-        padding: theme.spacing(4)
-    }
-}))
+const useStyles = makeStyles((theme) => ({
+  root: {},
+  left: {
+    width: '400px',
+  },
+  right: {
+    flex: '1',
+    marginRight: theme.spacing(2),
+  },
+  pagination: {
+    marginTop: '20px',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingBottom: '20px',
+  },
+  img: {
+    padding: theme.spacing(4),
+  },
+}));
 
-DetailProductPage.propTypes = {
-    
-};
+DetailProductPage.propTypes = {};
 
 function DetailProductPage({}) {
-    
-    const classes = useStyles();
-    const {params: {idProduct},
-            url
-    } = useRouteMatch(); 
-  
+  const classes = useStyles();
+  const {
+    params: { idProduct },
+    url,
+  } = useRouteMatch();
+  const dispatch = useDispatch();
 
-    const {product, loading} = useDetailProduct(idProduct);
+  const { product, loading } = useDetailProduct(idProduct);
 
+  if (loading) {
+    return <Box>Loading</Box>;
+  }
 
-    if(loading){
-        return <Box>Loading</Box>;
-    }
-
-    const handleCartToSubmit = (formValues) => {
-        console.log(formValues);
-    };
-
-    return (
-        <Box>
-            <Container >
-                <Paper>
-                    <Grid container spacing={2}>
-                        <Grid item className={classes.left}>
-                            <Box className={classes.img}>
-                               <ProductThumbnail product={product} />
-                            </Box>
-                        </Grid>
-                        <Grid item className={classes.right}>
-                            <ProductInfo product={product} />
-                            <AddToCartForm onSubmit={handleCartToSubmit}/>
-                        </Grid>
-                    </Grid>
-                </Paper>
-
-                <ProductMenu/>
-
-                <Switch>
-                    <Route path={url} exact>
-                        <ProductDescription product={product}/>
-                    </Route>
-                </Switch>
-                
-            </Container>
-        </Box>
+  const handleCartToSubmit = ({ quantity }) => {
+    dispatch(
+      addToCart({
+        id: product.id,
+        product,
+        quantity: quantity,
+      })
     );
+  };
+
+  return (
+    <Box>
+      <Container>
+        <Paper>
+          <Grid container spacing={2}>
+            <Grid item className={classes.left}>
+              <Box className={classes.img}>
+                <ProductThumbnail product={product} />
+              </Box>
+            </Grid>
+            <Grid item className={classes.right}>
+              <ProductInfo product={product} />
+              <AddToCartForm onSubmit={handleCartToSubmit} />
+            </Grid>
+          </Grid>
+        </Paper>
+
+        <ProductMenu />
+
+        <Switch>
+          <Route path={url} exact>
+            <ProductDescription product={product} />
+          </Route>
+        </Switch>
+      </Container>
+    </Box>
+  );
 }
 
 export default DetailProductPage;

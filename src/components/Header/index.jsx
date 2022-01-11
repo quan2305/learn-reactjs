@@ -14,10 +14,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Register from '../../features/Auth/components/Register';
 import Login from '../../features/Auth/components/Login';
-import { Box, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { Badge, Box, IconButton, Menu, MenuItem } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { logout } from '../../features/Auth/userSlice';
+import MailIcon from '@material-ui/icons/Mail';
+import { cartItemsCountSelector } from '../../features/Cart/selector';
+import { useHistory } from 'react-router-dom';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,7 +56,9 @@ export default function Header() {
   const [open, setOpen] = React.useState(false);
   const [mode, setMode] = React.useState(MODE.LOGIN);
   const [anchorEl, setAnchorEl] = useState(null);
+  const cartItemsCount = useSelector(cartItemsCountSelector);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -77,6 +83,11 @@ export default function Header() {
     dispatch(action);
   }
 
+  function handleCartClick() {
+    history.push('/cart');
+  }
+
+
   const classes = useStyles();
 
   return (
@@ -85,10 +96,13 @@ export default function Header() {
         <Toolbar>
           <CodeIcon />
           <Typography variant="h6" className={classes.title}>
-            <Link to="" className={classes.link}>
+            <Link to="  " className={classes.link}>
               Ez Shop
             </Link>
           </Typography>
+          <Link to="products" className={classes.link}>
+            <Button color="inherit">Home</Button>
+          </Link>
           <Link to="todos" className={classes.link}>
             <Button color="inherit">Todo</Button>
           </Link>
@@ -100,6 +114,13 @@ export default function Header() {
               Login
             </Button>
           )}
+
+          <IconButton aria-label="show 4 new mails" color="inherit" onClick={handleCartClick}>
+            <Badge badgeContent={cartItemsCount} color="secondary">
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
+
           {isLoggedIn && (
             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleUserClick}>
               <IconButton>
